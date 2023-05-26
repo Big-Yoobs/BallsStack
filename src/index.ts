@@ -23,8 +23,27 @@ const createWindow = (): void => {
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  mainWindow.maximize();
+  
+  //input checking
+  mainWindow.webContents.on('before-input-event', (event, input) => {
+    // FULLSCREEN: Handle the F11 key press.
+    if (input.key === 'F10') {
+      event.preventDefault();
+      mainWindow.setFullScreen(!mainWindow.isFullScreen());
+    }
+
+     // DEVTOOLS: Handle the F12 key press.
+    if (input.key === 'F12') {
+      event.preventDefault();
+      mainWindow.webContents.toggleDevTools();
+    }
+
+    if (input.key === 'F5') {
+      event.preventDefault();
+      mainWindow.reload();
+    }
+  });
 };
 
 // This method will be called when Electron has finished
